@@ -40,6 +40,7 @@ EOF`
 
 + **Apply sysctl params without reboot**
 `sudo sysctl --system`
+
 + **Disable swap on all the Nodes**
 For kubeadm to work properly, we need to disable swap on all the nodes using the following command.
 `sudo swapoff -a
@@ -47,6 +48,7 @@ For kubeadm to work properly, we need to disable swap on all the nodes using the
 The fstab entry will make sure the swap is off on system reboots.
 
 we can also, control swap errors using the kubeadm parameter --ignore-preflight-errors Swap.
+
 
 # Install CRI-O Runtime On All The Nodes
 The basic requirement for a Kubernetes cluster is a container runtime. we can have any one of the following container runtimes.
@@ -70,26 +72,35 @@ cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cr
 deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$VERSION/$OS/ /
 EOF`
 
+
 + **Add the GPG keys for CRI-O to the system’s list of trusted keys.**
 `curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/Release.key | sudo apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
 curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | sudo apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -`
+
 + **Update and install crio and crio-tools.**
 `sudo apt-get update
 sudo apt-get install cri-o cri-o-runc cri-tools -y`
+
 + **Reload the systemd configurations and enable cri-o.**
+  
 `sudo systemctl daemon-reload
 sudo systemctl enable crio --now`
 
 _Note: The cri-tools contain crictl, a CLI utility to interact with the containers created by the container runtime. When you use container runtimes other than Docker, you can use the crictl utility to debug containers on the nodes_
 
 + **Install Kubeadm & Kubelet & Kubectl on all Nodes**
+                     
 Install the required dependencies.
 `sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl`
+
 + **Download the GPG key for the Kubernetes APT repository.**
+  
 `sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://dl.k8s.io/apt/doc/apt-key.gpg`
+
 + **Add the Kubernetes APT repository to your system.**
 `echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list`
+
 + **Update apt repo**
 `sudo apt-get update -y`
 
