@@ -1,11 +1,11 @@
-** INSTALLING KUBERNETES CLUSTER USING KUBEADM **
+**INSTALLING KUBERNETES CLUSTER USING KUBEADM**
 ![image](https://github.com/Sayedshazebali/Kubernetes-installation-shazeb.ali/assets/115386350/eba01339-7c67-4785-9da8-12b95d217ca0)
 
-In this Image its show how kubeadm init work when we install with the help of kubeadm tool
+In this Image its show how Kubeadm init work when we install with the help of kubeadm tool
 
-**KUBEADM SETUP PREREQUISITES **
-Minimun 2 ubuntu nodes 1for master and one for worker node we can use more that that also but i am using 2 instance
-Master node should be min 2 vCpu and 2gb Ram
+**KUBEADM SETUP PREREQUISITES**
++ Minimum 2 Ubuntu nodes 1for master and one for worker node we can use more than that also but i am using 2 instance
++ +The master node should be min 2 vCpu and 2gb Ram
 For worker a min of 1vCpu and 2 gb Ram
 ** Kubeadm port requirements **
 *For Control-plane node
