@@ -22,8 +22,10 @@ In this Image its show how Kubeadm init work when we install with the help of ku
 **Enable iptables Bridged Traffic on all the Nodes**
 For ALL THE NODES
 IPtables to see bridged traffic. Here we are tweaking some kernel parameters and setting them using sysctl
-<pre>
-  cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+
+
+'''
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
@@ -37,7 +39,7 @@ net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
+'''
 
 # Apply sysctl params without reboot
 sudo sysctl --system
-</pre>
