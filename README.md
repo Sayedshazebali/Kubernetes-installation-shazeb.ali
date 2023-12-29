@@ -19,7 +19,7 @@ In this Image its show how Kubeadm init work when we install with the help of ku
 + 10250: Kubelet API for self and control plane
 + 30000-32767: for nodeport-service: for all
 
-**Enable iptables Bridged Traffic on all the Nodes**
++ **Enable iptables Bridged Traffic on all the Nodes**
 For ALL THE NODES
 IPtables to see bridged traffic. Here we are tweaking some kernel parameters and setting them using sysctl
 
@@ -38,9 +38,9 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF`
 
-**Apply sysctl params without reboot**
++ **Apply sysctl params without reboot**
 `sudo sysctl --system`
-**Disable swap on all the Nodes**
++ **Disable swap on all the Nodes**
 For kubeadm to work properly, we need to disable swap on all the nodes using the following command.
 `sudo swapoff -a
 (crontab -l 2>/dev/null; echo "@reboot /sbin/swapoff -a") | crontab - || true`
@@ -70,27 +70,27 @@ cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cr
 deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$VERSION/$OS/ /
 EOF`
 
-**Add the GPG keys for CRI-O to the system’s list of trusted keys.**
++ **Add the GPG keys for CRI-O to the system’s list of trusted keys.**
 `curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/Release.key | sudo apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -
 curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | sudo apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers.gpg add -`
-**Update and install crio and crio-tools.**
++ **Update and install crio and crio-tools.**
 `sudo apt-get update
 sudo apt-get install cri-o cri-o-runc cri-tools -y`
-**Reload the systemd configurations and enable cri-o.**
++ **Reload the systemd configurations and enable cri-o.**
 `sudo systemctl daemon-reload
 sudo systemctl enable crio --now`
 
 _Note: The cri-tools contain crictl, a CLI utility to interact with the containers created by the container runtime. When you use container runtimes other than Docker, you can use the crictl utility to debug containers on the nodes_
 
-**Install Kubeadm & Kubelet & Kubectl on all Nodes**
++ **Install Kubeadm & Kubelet & Kubectl on all Nodes**
 Install the required dependencies.
 `sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl`
-**Download the GPG key for the Kubernetes APT repository.**
++ **Download the GPG key for the Kubernetes APT repository.**
 `sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://dl.k8s.io/apt/doc/apt-key.gpg`
-**Add the Kubernetes APT repository to your system.**
++ **Add the Kubernetes APT repository to your system.**
 `echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list`
-**Update apt repo**
++ **Update apt repo**
 `sudo apt-get update -y`
 
 
