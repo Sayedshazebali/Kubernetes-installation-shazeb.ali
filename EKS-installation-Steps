@@ -1,0 +1,229 @@
+What is Amazon EKS
+Amazon EKS is a managed service that is used to run Kubernetes on AWS. Using EKS users don’t have to maintain a Kubernetes control plan on their own. It is used to automate the deployment, scaling, and maintenance of the containerized application. It works with most operating systems.
+
+
+
+Architecture of EKS
+
+EKS is integrated with various AWS services:
+
+ECR (Elastic Container Registry) for container images.
+Elastic Load Balancer for distributing traffic.
+IAM for providing authentication and authorization.
+VPC (Virtual Private Cloud) for isolating resources.
+Also check: The difference between CKAD vs CKA
+
+Benefits of Amazon EKS
+Normally time-consuming tasks, such as constructing the Kubernetes master cluster and setting service discovery, Kubernetes primitives, and networking, are handled by AWS EKS. Existing tools will almost certainly work through EKS with minimal if any, modifications.
+
+The Kubernetes control plane, comprising the backend persistence layer and API servers, is provisioned and scaled across multiple AWS availability zones using Amazon EKS, resulting in high availability and the elimination of a single point of failure. Unhealthy control plane nodes are identified and replaced, and control plane patching is given. As a result, an AWS-managed Kubernetes cluster that can endure the loss of an availability zone has been created.
+
+How Amazon EKS Works
+The most basic explanation for EKS is that it is AWS’ solution for Kubernetes-as-a-service. EKS, as previously stated, greatly simplifies the management and maintenance of highly available Kubernetes clusters in AWS.
+
+Amazon EKS Components
+eks
+1) Nodes: A node is a physical or virtual machine. In EKS both Master Node and Worker Node are managed by EKS. There are two types of nodes.
+
+Master Nodes: A Master Node is a collection of components like Storage, Controller, Scheduler, and API server that make up the control plan of Kubernetes. The EKS itself creates the Master Node and manages it.
+API Servers: It controls the API servers whether it is kubctl (Kubernetes CLI) or rest API.
+etcd: It is a highly available key-value store that is distributed among the Kubernetes cluster to store configuration data.
+Controller Manager: Cloud Controller Manager is used to manage the VMs, storage, databases, and other resources associated with the Kubernetes cluster. It makes sure that you are using as much as the container needed at a point in time. It keeps a count of containers used and also records the state.
+Scheduler: It validates what and when the work needs to be done. It integrates with the Controller manager and API servers.
+Worker Nodes: The worker nodes in a cluster are the machines or physical servers that run your applications. The user is responsible for creating and managing worker nodes.
+kublet: It controls the flow to and fro from the API. It makes sure containers are running in the pod.
+kubproxy: It includes networking rules and access control. It is like a firewall.
+master & worker nodes
+
+2) Pods: A group of containers is called pods. They share networking, storage, IP address, and port spaces.
+
+3) DaemonSet: It makes sure that all node runs a copy of a certain pod. It is like a monitoring tool.
+
+Learn more about Kubernetes Architecture.
+
+Master Nodes or Control Plane
+The Control Plane consists of three K8s master nodes that run in three different availability zones (AZs). All incoming traffic to K8s API comes through the network load balancer (NLB). It runs on the virtual private cloud controlled by Amazon. So, the Control Panel can’t be managed directly by the organization and is fully managed by AWS.
+
+Check out: All you need to Know about Docker Storage
+
+Worker Nodes or Data Plane
+Worner Nodes run on the Amazon EC2 instances in the virtual private cloud controlled by the organization. A cluster of worker nodes runs an organization’s containers while the control plane manages and monitors when and where containers are started.
+
+EKS usage algorithm
+
+Control Panel & Worker Node Communication
+
+Amazon EKS Workflow
+eks workflow
+Provision EKS cluster using AWS Console, AWS CLI, or one of the AWS SDKs.
+Deploy worker nodes to the EKS cluster. There is already a predefined template that will automatically configure nodes.
+Now we configure Kubernetes tools such as kubctl to communicate with the Kubernetes cluster.
+We are now all set to deploy an application on the Kubernetes cluster.
+Note: To know 10 things about EKS on AWS, click here.
+
+Also read: Comparison between Docker vs VM, a difference of both the machines you should know.
+
+Create EKS Kubernetes Cluster Using GUI
+The important steps involved are:
+1) Creating a Master Node
+2) Installing and Configuring AWS CLI & kubectl
+3) Creating a Worker Node
+
+The detailed 8 Steps are
+
+1-Create an AWS free tier account
+2-Create a Master Node
+3-Install and Configure AWS CLI
+4- Install and Configure kubectl
+5-Create Worker Nodes
+6-Configure Worker Nodes Networking
+7-Verifying the Worker Node by kubectl
+8-Delete the Worker and Master Node via GUI
+Step 1: The very first thing is to create an AWS account. If you don’t have an AWS Free Tier account please refer – Create AWS Free Tier Account
+
+Step 2: Next step is to create a Master Node, follow the below steps to create one.
+
+a) Log in to the AWS portal, find the Kubernetes Service by searching for EKS and click on Create Kubernetes Cluster and then specify the name for the Cluster.Create an EKS cluster
+create an eks cluster
+b) Next is to create the role, click on “Create role” -> AWS Service -> EKS (from AWS Services) -> Select EKS Cluster -> Next Permissions.IAM Role IAM Role
+c) Leave the selected policies as-it-is and click on Review Page.
+
+d) Enter a name for the role (e.g. eksClusterRole) and hit the Create role button at the bottom of the page to create the IAM role. The IAM role is created.
+
+Role
+
+Create EKS Kubernetes Cluster Using GUI
+
+e) Now Master node will be created in approximately 15-20 minutes.
+
+Create EKS Kubernetes Cluster Using GUICheck Out: What is Aks Cluster. Click here
+
+Step 3: Next step is to Install & configure AWS CLI on the EC2 instance. Follow the below links and steps for the same;
+
+To complete this step you need to create an Amazon Linux Instance first, click here
+To get the Latest EKS UserGuide visit Getting Started AWS Console, click here.
+Know more about the CLI UserGuide from CLI Configure Quickstart, click here.
+a) Click the account name and select Security Credentials. scroll down and Click on Create Access key.
+
+Create Access keyCLI
+
+AWS CLI Credentials Configuration
+
+Also Read: Our previous blog post on Kubernetes rbac
+
+Step 4: Next is to install & configure the kubectl, by checking your Cluster Name & Region Name where the EKS Master node is running from the console. Check the status of Cluster and Configure kubectl with EKS API Server and validate kubectl configuration to master node.
+To know more go through the blog Install and Configure kubectl, click here.
+
+Step 5: The final step is to create the Worker Node.
+
+a) On the cluster page, select the Compute tab, and then choose Add Node Group.
+
+b) On the Configure node group page, fill out the parameters accordingly, and then choose Next.
+
+Name – Enter a unique name for your managed node group.
+Node IAM role name– Choose the node instance role to use with your node group. For more information, see the Amazon EKS worker node IAM role, click here.
+Worker NodeTo Create an IAM role follow the below-given steps, and to open the IAM Console, click here
+
+Worker Node role
+Worker Node role
+After following all the above steps, leave the other settings to default and proceed further.
+
+Also Read Our previous blog post on Kubernetes network policy. Click here
+Step 6: Next is to configure the Compute & scaling of Worker Nodes.
+
+a) In this step we are providing the compute configurations. Follow the images below and complete the process:Worker Node
+Worker NodeAlso Check: Our previous blog post on Kubernetes for Testers. Click here
+
+b) Keep rest as default. On the Review and Create page, review your managed node group configuration, and choose to Create. Worker Node Group is under creation so wait for 2-3 minutes for workers nodes to be up and running.
+
+Worker Node
+
+Also Read: What is Kubernetes Cluster? Click here
+
+Step 7: The final step is to verify the Worker node status from Kubectl. For the same perform the given command:
+
+    $ kubectl get nodes --watch
+ 
+
+EKS watch
+
+Step 8: Delete all EKS cluster configurations manually. In the first step delete the worker Node, once worker nodes are deleted then Delete the Master Nodes.
+
+worker NodeMaster Nodes
+Create EKS Kubernetes Cluster Using AWS CLI
+Before proceeding to the next steps make sure you have the following configured on your AWS Account
+
+AWS Linux EC2 instance
+CLI configured on a virtual machine (EC2)
+Kubectl & eksctl installed on a virtual machine (EC2)
+Create EKS Master & Worker Nodes
+Create your AWS EKS cluster with nodes (this will take 10-20 minutes)
+
+eksctl create cluster \
+
+--name k21-eks-cluster-cli \
+
+--version 1.24 \
+
+--region us-east-1 \
+
+--nodegroup-name linux-nodes \
+
+--node-type t2.micro \
+
+--managed
+creating eks cluster using cli 
+Setup up the kubectl configuration
+Check your Cluster Name & Region Name where the EKS Master node is running from the console
+
+aws eks --region us-east-1 describe-cluster --name k21-eks-cluster-cli --query cluster.status
+
+mv $HOME/.kube/config  $HOME/.kube/config.old
+
+aws eks --region us-east-1 update-kubeconfig --name k21-eks-cluster-cli
+
+kubectl get svc
+
+kubectl get nodes
+
+kubectl get all
+ Delete EKS Cluster using EKSCTL
+eksctl delete cluster \
+
+--name k21-eks-cluster-cli \
+
+--region us-east-1
+Amazon EKS Pricing
+Though the pricing of various services in AWS is dynamic, it is recommended to check the pricing before deploying clusters.
+
+As a standard, we have to pay 0.10$ /hour for each Amazon EKS cluster and we can deploy multiple applications on each EKS cluster. We can run EKS using either EC2 or AWS Fargate, and on-premises using AWS outposts.
+
+To know more about Amazon EKS (Elastic Kubernetes Service), click here
+
+Amazon EKS Benefits
+No setup is required to configure Kubernetes on AWS.
+In this users need not create a control plan.
+Worker nodes are also managed by Amazon EKS
+EKS integrates with various AWS tools.
+Note: Using ECR we have to manage the underlying OS, infrastructure, and container engine but using EKS we only have to provide containerized applications, and the rest is managed by EKS.
+
+Frequently Asked Questions
+What is Amazon EKS used for?
+
+EKS is used to create and manage Kubernetes clusters, which are orchestration platforms for deploying, scaling, and managing containerized applications.
+
+What form of Kubernetes does Amazon Elastic Kubernetes service Amazon EKS support?
+
+Amazon Elastic Kubernetes Service (EKS) supports standard Kubernetes, which is the open-source container orchestration platform developed by the Kubernetes community. EKS runs fully compatible upstream Kubernetes, ensuring compatibility with Kubernetes APIs, tooling, and ecosystem.
+
+What is difference between EKS and Kubernetes?
+
+EKS is a managed service provided by AWS that simplifies the deployment and management of Kubernetes clusters, while Kubernetes is an open-source container orchestration platform. EKS handles the underlying infrastructure and manages the Kubernetes control plane, allowing developers to focus on their applications. Kubernetes, on the other hand, is a standalone platform that can be deployed on various environments and requires manual setup and management.
+
+Is EKS a container service?
+
+Yes, EKS (Amazon Elastic Kubernetes Service) is a container service provided by Amazon Web Services (AWS). It is a managed service that simplifies the deployment, management, and scaling of containerized applications using Kubernetes. EKS allows developers to run containerized applications on a cluster of Amazon EC2 instances without having to manage the underlying infrastructure.
+
+What is the difference between Amazon ECS and Amazon EKS?
+
+Amazon Elastic Container Service (ECS) is another container orchestration service provided by AWS. While both ECS and EKS allow you to deploy and manage containers, they have different underlying architectures. ECS is a fully managed service that integrates tightly with other AWS services, while EKS provides a managed Kubernetes control plane that runs on EC2 instances.
